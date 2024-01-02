@@ -45,12 +45,15 @@ def gen_empty(features: list, length:int) -> pandas.DataFrame:
 def gen_multichoice_features(evids: pandas.DataFrame) -> list:
    evids = transpose_drop(evids)
    m_collection =[]
+   m_collection_id =[]
    for i in range(len(evids)):
      if evids.iloc[i]['data_type'] == 'M':
         for each_val in evids.iloc[i]['possible-values']:
             col_name = evids.iloc[i]['name']+"_@_"+each_val
             m_collection.append(col_name)
-   return m_collection
+        m_collection_id.append(evids.iloc[i]['name'])
+#    print(m_collection_id)
+   return (m_collection,m_collection_id)
 
 def gen_singlechoice_features(evids: pandas.DataFrame)->list:
    evids = transpose_drop(evids)
@@ -66,7 +69,7 @@ def gen_singlechoice_features(evids: pandas.DataFrame)->list:
             for each_val in evids.iloc[i]['possible-values']:
                 col_name = evids.iloc[i]['name']+"_@_"+str(each_val)
                 c_collection.append(col_name)
-                categorical_c.append(evids.iloc[i]['name'])
+            categorical_c.append(evids.iloc[i]['name'])
 
    return (c_collection,ordinal_c,categorical_c)
 
