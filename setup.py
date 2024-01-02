@@ -55,15 +55,20 @@ def gen_multichoice_features(evids: pandas.DataFrame) -> list:
 def gen_singlechoice_features(evids: pandas.DataFrame)->list:
    evids = transpose_drop(evids)
    c_collection =[]
+   ordinal_c = []
+   categorical_c = []
    for i in range(len(evids)):
      if evids.iloc[i]['data_type'] == 'C':
         if all(isinstance(each_val,int) for each_val in evids.iloc[i]['possible-values']):
             c_collection.append(evids.iloc[i]['name'])
+            ordinal_c.append(evids.iloc[i]['name'])
         else:
             for each_val in evids.iloc[i]['possible-values']:
                 col_name = evids.iloc[i]['name']+"_@_"+str(each_val)
                 c_collection.append(col_name)
-   return c_collection
+                categorical_c.append(evids.iloc[i]['name'])
+
+   return (c_collection,ordinal_c,categorical_c)
 
 
 def gen_binary_features(evids: pandas.DataFrame)->list:
