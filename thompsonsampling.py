@@ -7,12 +7,13 @@ from scipy.stats import beta
 
 o.system('cls')
 
-d = 49
-
+d = 0 
 n_pos = nump.zeros(d)
 n_neg= nump.zeros(d)
 
-def pick_bandit(d):
+def pick_bandit(dlc):
+    global d
+    d = dlc
     iter_max =0
     for j in range(d):
         sampled_beta =  nump.random.beta(n_pos[j]+1,n_neg[j]+1)
