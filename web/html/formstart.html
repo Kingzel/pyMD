@@ -1,0 +1,64 @@
+{%extends "template.html"%}
+{%block title%}pyMD{%endblock%}
+{%block body%}
+<head>
+
+</head>
+<div class="form-body">
+    <div class="row">
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Let's get started with some basic details</h3>
+                    <p>Fill in the data below.</p>
+                    <form class="requires-validation" action = '#' method="post">
+
+                        <div class="col-md-12">
+                           <input class="form-control" type="text" name="name" placeholder="Full Name" required>
+                           <div class="valid-feedback">Username field is valid!</div>
+                           <div class="invalid-feedback">Username field cannot be blank!</div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
+                             <div class="valid-feedback">Email field is valid!</div>
+                             <div class="invalid-feedback">Email field cannot be blank!</div>
+                        </div>
+
+                       <div class="col-md-12 mt-3">
+                        <label class="mb-3 mr-1" for="gender">Gender: </label>
+                        <br>
+                        <input type="radio" class="btn-check" name="gender" id="male" value="M" autocomplete="off" required>
+                        <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
+                        <br>
+                        <input type="radio" class="btn-check" name="gender" id="female" value="F" autocomplete="off" required>
+                        <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
+
+                           <div class="valid-feedback mv-up">You selected a gender!</div>
+                            <div class="invalid-feedback mv-up">Please select a gender!</div>
+                        </div>
+
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="True" name="send-chk" id="invalidCheck">
+                        <label class="form-check-label">Send report to email?</label>
+                        </div>
+              
+
+                        <div class="form-button mt-3">
+                            <button id="submit" type="submit" class="btn btn-primary">Proceed</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{%endblock%}

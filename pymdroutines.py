@@ -42,7 +42,7 @@ def gen_empty(features: list, length:int) -> pandas.DataFrame:
    return pandas.DataFrame(0, index=range(length), columns=features)
 
 
-def gen_multichoice_features(evids: pandas.DataFrame) -> list:
+def gen_multichoice_features(evids: pandas.DataFrame, flag :str ='S') -> list:
    evids = transpose_drop(evids)
    m_collection =[]
    m_collection_id =[]
@@ -52,10 +52,12 @@ def gen_multichoice_features(evids: pandas.DataFrame) -> list:
             col_name = evids.iloc[i]['name']+"_@_"+each_val
             m_collection.append(col_name)
         m_collection_id.append(evids.iloc[i]['name'])
-#    print(m_collection_id)
-   return (m_collection,m_collection_id)
+   if flag == "S":
+      return m_collection
+   elif flag == 'M':
+      return m_collection_id
 
-def gen_singlechoice_features(evids: pandas.DataFrame)->list:
+def gen_singlechoice_features(evids: pandas.DataFrame, flag :str ='S')->list:
    evids = transpose_drop(evids)
    c_collection =[]
    ordinal_c = []
@@ -70,8 +72,12 @@ def gen_singlechoice_features(evids: pandas.DataFrame)->list:
                 col_name = evids.iloc[i]['name']+"_@_"+str(each_val)
                 c_collection.append(col_name)
             categorical_c.append(evids.iloc[i]['name'])
-
-   return (c_collection,ordinal_c,categorical_c)
+   if flag == 'S':
+      return c_collection
+   elif flag == 'MO':
+      return ordinal_c
+   elif flag == 'MC':
+      return categorical_c
 
 
 def gen_binary_features(evids: pandas.DataFrame)->list:
@@ -92,13 +98,16 @@ def transpose_drop(evids:pandas.DataFrame)->pandas.DataFrame:
 
 def disp(class_val  : int, question_en :str, value_meaning: dict ={}, possible_values :list =[]):
    if class_val == 0: #binary question
-      print(question_en)
+      return 'Yes or No'
    elif class_val == 1: #single choice categorical question
-      print(question_en)
+      scq = {}
       for k,i in zip(value_meaning.keys(),value_meaning.items()):
-        print(k,i[1]['en'])
+        scq[k]=i[1]['en']
+      return scq
    elif class_val == 2: #single choice ordinal question
-      print(question_en)
+      return(possible_values)
    else: #multi choice question
+        mcq = {}
         for k,i in zip(value_meaning.keys(),value_meaning.items()):
-           print(k,i[1]['en'])
+            mcq[k]=i[1]['en']
+        return mcq
