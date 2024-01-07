@@ -98,15 +98,19 @@ def transpose_drop(evids:pandas.DataFrame)->pandas.DataFrame:
 
 def disp(class_val  : int, question_en :str, value_meaning: dict ={}, possible_values :list =[]):
    if class_val == 0: #binary question
-      return 'Yes or No'
+      return {0:'No',1:'Yes'}
    elif class_val == 1: #single choice categorical question
-      scq = {}
+      scq_cat = {}
       for k,i in zip(value_meaning.keys(),value_meaning.items()):
-        scq[k]=i[1]['en']
-      return scq
+        scq_cat[k]=i[1]['en']
+      return scq_cat
    elif class_val == 2: #single choice ordinal question
-      return(possible_values)
-   else: #multi choice question
+      scq_ord ={}
+      for value in possible_values:
+         scq_ord[value] = value
+      return scq_ord
+         
+   else: #multi choice question 
         mcq = {}
         for k,i in zip(value_meaning.keys(),value_meaning.items()):
             mcq[k]=i[1]['en']
