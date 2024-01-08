@@ -1,0 +1,15 @@
+{%extends "template.html"%}
+{%block title%}About pyMD{%endblock%}
+
+{%block body%}
+
+<h1>Your most likely diagnoses:</h1><br>
+
+{%for i in range(5)%}
+<h3>{{disease[i]}}</h3>
+<h5>with a calculated chance of</h5>
+<h4>{{probab[i]}}%</h4>
+
+{%endfor%}
+
+{%endblock%}

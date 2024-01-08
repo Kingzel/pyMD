@@ -37,7 +37,7 @@ evids1 = evids1.T
 
 
 conds = conds.T
-conds.drop(['cond-name-fr', 'antecedents','cond-name-eng','icd10-id'], axis=1, inplace=True)
+conds.drop(['cond-name-fr','cond-name-eng','icd10-id'], axis=1, inplace=True)
 
 
 cond_to_evi = {}
@@ -46,7 +46,7 @@ cond_to_int ={}
 for i in range(len(conds)):
    condition=  conds.iloc[i]
    name =condition['condition_name']
-   cond_to_evi[name] = set(condition['symptoms'].keys())
+   cond_to_evi[name] = set(condition['symptoms'].keys()).union(set(condition['antecedents'].keys()))
    int_to_cond[i]=name
    cond_to_int[name]=i
 
@@ -66,6 +66,10 @@ with open('trained_model.bin', 'rb') as f:
     cols  = p.load(f)
 dummy= pmdr.gen_empty(cols,1)
 all_classes_probab = e.all_classes_probab(rf,dummy)
+
+questions_asked = []
+
+
 #Thompson Sampling RL 
 n_pos =np.zeros(len(conds))
 n_neg=np.zeros(len(conds))
@@ -103,8 +107,12 @@ def plot_bandits():
 
 @app.route('/')
 def home():
-    session['q_asked'] =10
+    session['q_asked'] =3
     return render_template('index.html')
+
+@app.route('/result')
+def result():
+    return render_template('result.html', disease=glob['disease'], probab = glob['probab'])
 
 @app.route('/logout')
 def logout():
@@ -132,8 +140,15 @@ def diagnose():
                 glob["picked_question_type"] = glob["picked"][2]
                 session['q_asked'] = session['q_asked']-1
             else:
-                 print(e.get_most_confident_class(rf,dummy))
-                 return redirect(url_for('home'))
+                 all_classes = e.all_classes_probab(rf,dummy)
+                 diseases=[]
+                 probabilities = []
+                 for dis in all_classes:
+                      diseases.append(dis)
+                      probabilities.append(np.round(all_classes[dis]*100),2)
+                 glob["disease"] =diseases
+                 glob['probab'] = probabilities
+                 return redirect(url_for('result'))
                  
             # print('New question loaded!')
         elif request.method=='POST':
@@ -182,6 +197,12 @@ def start_form():
         if request.method == 'POST':
              session.permanent = False
              session["name"],session["email"],session["gender"],session["is_send"] = request.form['name'],request.form['email'],request.form['gender'],request.form.get('send-chk')
+             print("GENDERRR",session['gender'])
+             if session['gender'] =='M':
+                  dummy['SEX'] =0
+             else:
+                  dummy['SEX'] =1
+                  
              return redirect(url_for("diagnose"))
         else:
             return render_template('formstart.html')
@@ -212,14 +233,15 @@ def put_place(colname:str, value:int):
     return pos_keys,len(pos_keys)
 
 def pick():
-    flag = False
     symp_set =None
-    while symp_set is None or not flag :
+    while symp_set is None:
          picked_bandit = pick_bandit() # Pick disease with the current highest possibility (using beta sampling).
          disease = int_to_cond[picked_bandit] 
          symp_set = cond_to_evi[disease]  
-         flag = True       
-    enquiry_chosen = random.choice(list(symp_set)) # Choose a random symptom of that disease to enquire about disease.
+    enquiry_chosen = None
+    while  enquiry_chosen is None or enquiry_chosen in questions_asked:
+        enquiry_chosen = random.choice(list(symp_set))
+    questions_asked.append(enquiry_chosen) # Choose a random symptom of that disease to enquire about disease.
     cond_to_evi[disease] = symp_set.remove(enquiry_chosen)
     question_data = evids1.loc[enquiry_chosen,["name","question_en",'possible-values','value_meaning']]
     feat_group_classify = lambda enquiry_chosen: 1 if enquiry_chosen in categorical_evi_sc else (0 if enquiry_chosen in binary_evi else ( 3 if enquiry_chosen in multi_evi else 2 )) 
