@@ -94,8 +94,8 @@ def plot_bandits():
             y= beta.pdf(x,n_pos[j]+1,n_neg[j]+1)
             plt.plot(x,y,color = clist[j])
         plt.xlabel("Estimated Probability")
-        plt.ylabel("Probability")
-        plt.title("Beta Distribution")
+        plt.ylabel("Probability of Conditions")
+        plt.title("BetaPDF")
         name =random.randrange(3,100000)
         plt.savefig(f'{name}.png')
 
@@ -104,14 +104,15 @@ def plot_bandits():
 #/////////////////////////////////////////////////////////////////////////////////////
 #/////////////////////////////////////////////////////////////////////////////////////
 #/////////////////////////////////////////////////////////////////////////////////////
+glob['q_asked'] =20
 
 @app.route('/')
 def home():
-    session['q_asked'] =3
     return render_template('index.html')
 
 @app.route('/result')
 def result():
+    # print(glob['disease'],glob['probab'])
     return render_template('result.html', disease=glob['disease'], probab = glob['probab'])
 
 @app.route('/logout')
@@ -132,22 +133,23 @@ def about():
 def diagnose():
     if 'name' in session:
         if request.method=='GET':
-            if session['q_asked'] > 0:
+            if glob['q_asked'] > 0:
                 glob["picked"] =pick()
                 glob["picked_question_data"] = glob["picked"][0]
                 glob["picked_question"] =glob["picked_question_data"]['question_en']
                 glob["picked_options"] = glob["picked"][1]
                 glob["picked_question_type"] = glob["picked"][2]
-                session['q_asked'] = session['q_asked']-1
+                glob['q_asked'] = glob['q_asked']-1
             else:
                  all_classes = e.all_classes_probab(rf,dummy)
                  diseases=[]
                  probabilities = []
                  for dis in all_classes:
                       diseases.append(dis)
-                      probabilities.append(np.round(all_classes[dis]*100),2)
+                      probabilities.append(np.round(np.round(all_classes[dis],4)*100,2))
                  glob["disease"] =diseases
                  glob['probab'] = probabilities
+                #  print(all_classes)
                  return redirect(url_for('result'))
                  
             # print('New question loaded!')
@@ -158,27 +160,27 @@ def diagnose():
                     val = 0
                     if 'yes' in request.form.to_dict().keys():
                          val = 1
-                    print(put_place(colname,val)) 
+                    put_place(colname,val)
                          
              elif glob["picked_question_type"] ==1: #cat sc:
                     # print(glob["picked_question_data"]['name'],request.form.to_dict())
                     colname = glob["picked_question_data"]['name']+"_@_"+str(list(request.form.to_dict().values())[0])
                     val = 1
-                    print(put_place(colname,val)) 
+                    put_place(colname,val)
              
              
              elif glob["picked_question_type"] ==2: #ord sc:
                     # print(glob["picked_question_data"]['name'],request.form.to_dict())
                     colname = glob["picked_question_data"]['name']
                     val = int(list(request.form.to_dict().values())[0])
-                    print(put_place(colname,val)) 
+                    put_place(colname,val)
 
 
              elif glob["picked_question_type"] ==3: #multi choice:
                     for V in request.values.getlist("group"):
                         colname = glob["picked_question_data"]['name']+"_@_"+str(V)
                         val =1
-                        print(put_place(colname,val)) 
+                        put_place(colname,val)
 
              
              
@@ -197,7 +199,7 @@ def start_form():
         if request.method == 'POST':
              session.permanent = False
              session["name"],session["email"],session["gender"],session["is_send"] = request.form['name'],request.form['email'],request.form['gender'],request.form.get('send-chk')
-             print("GENDERRR",session['gender'])
+            #  print("GENDER",session['gender'])
              if session['gender'] =='M':
                   dummy['SEX'] =0
              else:
@@ -217,7 +219,7 @@ def put_place(colname:str, value:int):
     pos_keys=[]
     neg_keys=[]
     for key in current:
-        if current[key] > all_classes_probab[key]:
+        if current[key] >  all_classes_probab[key]:
             pos_keys.append(key)
         elif current[key] <= all_classes_probab[key]:
             neg_keys.append(key)
@@ -227,17 +229,19 @@ def put_place(colname:str, value:int):
         n_neg[id] +=1
     for key in pos_keys:
         id=cond_to_int[key]
-        n_pos[id] +=2
+        n_pos[id] +=1   
     current={}
     plot_bandits()
-    return pos_keys,len(pos_keys)
 
 def pick():
     symp_set =None
     while symp_set is None:
          picked_bandit = pick_bandit() # Pick disease with the current highest possibility (using beta sampling).
          disease = int_to_cond[picked_bandit] 
-         symp_set = cond_to_evi[disease]  
+         symp_set = cond_to_evi[disease]
+         if symp_set:
+              break
+    print(symp_set)
     enquiry_chosen = None
     while  enquiry_chosen is None or enquiry_chosen in questions_asked:
         enquiry_chosen = random.choice(list(symp_set))
@@ -249,4 +253,4 @@ def pick():
     return question_data,pmdr.disp(question_group_val, question_data["question_en"],question_data["value_meaning"],question_data["possible-values"]),question_group_val
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
