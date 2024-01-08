@@ -1,4 +1,4 @@
-**_pyMD_**
+<h1>pyMD - An Auto Diagnosis tool powered by Online Policy based Reinforcement learning.</h1>
 
 **Description:**
 
