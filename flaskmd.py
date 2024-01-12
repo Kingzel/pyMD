@@ -15,11 +15,11 @@ import evaluate as e
 from scipy.stats import beta
 
 
-app = Flask(__name__,template_folder='web/html', static_folder='web' )
+app = Flask(__name__,template_folder='web/html', static_folder='web')
 app.secret_key = 'pymdsecret1234@!!@'
 glob={}
-log = logging.getLogger('werkzeug')
-log.disabled = True
+#log = logging.getLogger('werkzeug')
+#log.disabled = True
 
 
 
@@ -170,7 +170,6 @@ def diagnose():
              
              
              elif glob["picked_question_type"] ==2: #ord sc:
-                    # print(glob["picked_question_data"]['name'],request.form.to_dict())
                     colname = glob["picked_question_data"]['name']
                     val = int(list(request.form.to_dict().values())[0])
                     put_place(colname,val)
@@ -250,7 +249,7 @@ def pick():
     question_data = evids1.loc[enquiry_chosen,["name","question_en",'possible-values','value_meaning']]
     feat_group_classify = lambda enquiry_chosen: 1 if enquiry_chosen in categorical_evi_sc else (0 if enquiry_chosen in binary_evi else ( 3 if enquiry_chosen in multi_evi else 2 )) 
     question_group_val = feat_group_classify(enquiry_chosen)
-    return question_data,pmdr.disp(question_group_val, question_data["question_en"],question_data["value_meaning"],question_data["possible-values"]),question_group_val
+    return question_data, pmdr.disp(question_group_val, question_data["question_en"],question_data["value_meaning"],question_data["possible-values"]),question_group_val
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

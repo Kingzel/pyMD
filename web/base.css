@@ -194,3 +194,28 @@ hr{
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
+
+  .container-abt{
+    max-width: max-content  ;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #495056;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#header-abt
+{
+    color: whitesmoke;
+    font-size: 35pt;
+    text-wrap:nowrap;
+    text-align: center;
+
+}
+#text-abt
+{
+    font-family: 'Poppins';
+    color: antiquewhite;
+    font-size: 15pt;
+    text-align: center;
+}
