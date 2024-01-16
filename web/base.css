@@ -210,7 +210,7 @@ hr{
     font-size: 35pt;
     text-wrap:nowrap;
     text-align: center;
-
+        
 }
 #text-abt
 {
@@ -218,4 +218,111 @@ hr{
     color: antiquewhite;
     font-size: 15pt;
     text-align: center;
+}
+
+
+
+
+
+
+.container-ind {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    /* background-color: #1a1a1a; */
+    color: antiquewhite;
+overflow-inline: hidden;
+}
+
+
+#ind-h1{    font-size: 120pt;
+}
+#ind-h2{    
+    font-size: 40pt;
+    width: 100%;
+    height: 100px;
+    overflow:visible;
+    text-align: center;
+    /* background-color: red; */
+    
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+.text-container-ind {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.text-container-ind.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cursor {
+    display: inline-block;
+    vertical-align: middle;
+    width: 8px;
+    height: 90pt;
+    margin-left: 20px;
+    background-color: white ;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+
+.additional-text h2 {
+    width: 100%; /* Make the h2 take up the full width */
+}
+
+.additional-text {
+    margin-top: 200px; /* Adjust the distance below h1 */
+    display: flex;
+    justify-content: space-between;
+    /* flex-wrap: wrap; */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.additional-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* CSS for a larger link */
+.additional-lk a {
+    font-size: 40pt; /* Adjust the font size */
+    padding: 10px 20px; /* Add padding to increase clickable area */
+    color: rgb(67, 121, 121);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    text-align: center;
+    margin-top:145px;
+    /* background-color: red; */
+    
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.additional-lk a:hover {
+    color: #66c2ff; /* Change color on hover */
 }

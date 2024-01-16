@@ -2,5 +2,41 @@
 {%block title%}pyMD{%endblock%}
 {%block body%}
 
-<h1>Content to be displayed</h1>
+<div class="container-ind">
+    <div class="text-container" id="textContainer-ind">
+        <h1 id ='ind-h1'>pyMD is finally here.<span class="cursor"></span></h1>
+
+        <div class="additional-text" id="additionalText">
+            <h2 id = 'ind-h2'>A Medical questionnaire powered by Reinforcement Learning and Ensemble Learning. </h2>
+            <div class="additional-lk"><a href="/start">Get Started</a></div>
+
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('scroll', revealText);
+        revealText(); // Initial check in case the element is already visible on load
+
+        function revealText() {
+            var textContainer = document.getElementById('textContainer-ind');
+            var additionalText = document.getElementById('additionalText');
+            var windowHeight = window.innerHeight;
+            var scrollY = window.scrollY || window.pageYOffset;
+
+            var containerTop = textContainer.getBoundingClientRect().top + scrollY;
+
+            if (containerTop < windowHeight) {
+                textContainer.classList.add('visible');
+                additionalText.classList.add('visible');
+            }
+        }
+    });
+</script>
 {%endblock%}

@@ -103,7 +103,6 @@ def disp(class_val  : int, question_en :str, value_meaning: dict ={}, possible_v
       scq_cat = {}
       for k,i in zip(value_meaning.keys(),value_meaning.items()):
         scq_cat[k]=i[1]['en']
-      print(scq_cat)
       return scq_cat
    elif class_val == 2: #single choice ordinal question
       scq_ord ={}
