@@ -1,5 +1,5 @@
 <h1>pyMD - An Auto Diagnosis tool powered by Online Policy based Reinforcement learning.</h1>
-<h2>Code long repo is not the most updated version, the most up to date version of the project includes secrets, mail API requests and config data that could not be uploaded here for privacy reasons. Front end CSS changes and QoL changes were also fleshed out and updated on the deployment server ONLY. 
+<h2>The code on the repo is not the most updated version, the most up-to-date version of the project includes secrets, mail API requests and config data that could not be uploaded here for privacy reasons. Front end CSS changes and QoL changes were also fleshed out and updated on the deployment server ONLY. 
 Deployed at: <a href= 'https://www.kingzel.pythonanywhere.com'>pyMD</a>
 </h2>
 **Description:**
