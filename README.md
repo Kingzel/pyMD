@@ -2,7 +2,7 @@
 <h2>The code on the repo is not the most updated version, the most up-to-date version of the project includes secrets, mail API requests and config data that could not be uploaded here for privacy reasons. Front-end CSS and QoL changes were also fleshed out and updated ONLY on the deployment server.
 <br>
 <br> 
-Deployed at: <a href= 'https://www.kingzel.pythonanywhere.com'>pyMD</a></h2>
+Deployed at: <a href= 'kingzel.pythonanywhere.com'>pyMD</a></h2>
 
 **Description:**
 
